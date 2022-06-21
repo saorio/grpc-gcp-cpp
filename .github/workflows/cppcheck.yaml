@@ -12,13 +12,25 @@ jobs:
         uses: deep5050/cppcheck-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN}}
-
+          check_library: disable
+          skip_preprocessor: disable
+          enable: all
+          exclude_check:
+          inconclusive:
+          inline_suppression:
+          force_language: c++
+          force:
+          max_ctu_depth:
+          platform:
+          std: c++11
+          output_file: ./cppcheck_report.txt
+          other_options:
       - name: extract branch name
         run: |
           BRANCH_NAME=`echo ${GITHUB_REF##*/}` >> $GITHUB_ENV
 
       - name: publish report    
-        uses: mikeal/publish-to-github-action@1.0.0
+        uses: mikeal/publish-to-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: 'master'
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
